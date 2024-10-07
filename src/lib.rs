@@ -17,9 +17,24 @@ impl Board{
         return Self{width, height, state: vec![vec![Cell::Dead;width];height]};
     }
 
-    pub fn render(&self){
+    fn get_population(&self)->u64{
+        let mut pop = 0;
+        for v in &self.state{
+            for c in v{
+                match c{
+                    Cell::Alive => pop+=1,
+                    Cell::Dead => ()
+                }
+            }
+        }
+        return pop;
+    }
+
+    pub fn render(&self, i:u32){
         //clears the screen
         print!("\x1B[2J\x1B[1;1H");
+        print!("generation: {}\n", i);
+        print!("population: {}\n", self.get_population());
         for y in 0..self.height{
             for x in 0..self.width{
                 match self.state[y][x]{
