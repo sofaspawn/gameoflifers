@@ -6,7 +6,7 @@ pub struct Board{
     state: Vec<Vec<Cell>>
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum Cell{
     Alive,
     Dead
@@ -47,17 +47,24 @@ impl Board{
         //let mut new_state = vec![vec![0;self.width];self.height];
         for y in 1..self.height-1{
             for x in 1..self.width-1{
-                new_state[y][x] = self.check_8_nghbrs(x, y);
+                new_state[y][x] = self.check_cent_nghbrs(x, y);
             }
         }
         self.state = new_state;
     }
 
-    fn check_8_nghbrs(&self, x:usize, y:usize)->Cell{
-        let alive_nbrs = 0;
-        for i in -1..1{
-            let a= &self.state[y][x-1];
-        }
+    fn check_cent_nghbrs(&self, x:usize, y:usize)->Cell{
+        let mut alive_nbrs = 0;
+
+        if &self.state[y][x-1]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y][x+1]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y-1][x]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y+1][x]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y-1][x-1]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y+1][x+1]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y-1][x+1]==&Cell::Alive{alive_nbrs+=1}
+        if &self.state[y+1][x-1]==&Cell::Alive{alive_nbrs+=1}
+
         return match self.state[y][x]{
             Cell::Alive => {
                 if alive_nbrs<2 {Cell::Dead}
