@@ -45,12 +45,64 @@ impl Board{
     pub fn next_state(&mut self){
         let mut new_state = self.state.clone();
         //let mut new_state = vec![vec![0;self.width];self.height];
+        let corners = [[0,0], [0,self.width-1], [self.height-1,0], [self.height-1, self.width-1]];
+
+        for corner in corners{
+            let x = corner[1];
+            let y = corner[0];
+            new_state[y][x] = self.check_corners(x, y);
+        }
+
+        for y in 1..self.height-1{
+            let x = 0;
+            new_state[y][x] = self.check_edges(x, y);
+            let x = self.width-1;
+            new_state[y][x] = self.check_edges(x, y);
+        }
+
+        for x in 1..self.width-1{
+            let y = 0;
+            new_state[y][x] = self.check_edges(x, y);
+            let y = self.height-1;
+            new_state[y][x] = self.check_edges(x, y);
+        }
+
         for y in 1..self.height-1{
             for x in 1..self.width-1{
                 new_state[y][x] = self.check_cent_nghbrs(x, y);
             }
         }
         self.state = new_state;
+    }
+
+    fn check_edges(&self, x:usize, y:usize)->Cell{
+        Cell::Alive
+    }
+
+    fn check_corners(&self, x:usize, y:usize)->Cell{
+        let mut alive_nbrs = 0;
+
+        if x==0 && y==0{
+            if &self.state[y][x+1]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y+1][x]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y+1][x+1]==&Cell::Alive{alive_nbrs+=1}
+        } else if x==self.width-1 && y==0{
+            if &self.state[y][x-1]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y+1][x]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y+1][x-1]==&Cell::Alive{alive_nbrs+=1}
+        } else if x==self.width-1 && y==self.height-1{
+            if &self.state[y][x-1]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y-1][x]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y-1][x-1]==&Cell::Alive{alive_nbrs+=1}
+        } else if x==0 && y==self.height-1{
+            if &self.state[y][x+1]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y-1][x]==&Cell::Alive{alive_nbrs+=1}
+            if &self.state[y-1][x+1]==&Cell::Alive{alive_nbrs+=1}
+        }
+        
+        return match alive_nbrs{
+            _ => Cell::Dead
+        };
     }
 
     fn check_cent_nghbrs(&self, x:usize, y:usize)->Cell{
