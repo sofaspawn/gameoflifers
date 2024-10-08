@@ -91,7 +91,50 @@ impl Board{
     }
 
     fn check_edges(&self, x:usize, y:usize)->Cell{
-        Cell::Alive
+        let mut alive_nbors = 0;
+        if y>0 && y<self.height-1{
+            if x==0{
+                if self.state[y-1][x]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x]==Cell::Alive {alive_nbors+=1}
+                if self.state[y][x+1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y-1][x+1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x+1]==Cell::Alive {alive_nbors+=1}
+            }
+            if x==self.width-1{
+                if self.state[y-1][x]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x]==Cell::Alive {alive_nbors+=1}
+                if self.state[y][x-1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y-1][x-1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x-1]==Cell::Alive {alive_nbors+=1}
+            }
+        }
+        if x>0 && x<self.width-1{
+            if y==0{
+                if self.state[y][x-1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x-1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x]==Cell::Alive {alive_nbors+=1}
+                if self.state[y+1][x+1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y][x+1]==Cell::Alive {alive_nbors+=1}
+            }
+            if y==self.height-1{
+                if self.state[y][x-1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y-1][x-1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y-1][x]==Cell::Alive {alive_nbors+=1}
+                if self.state[y-1][x+1]==Cell::Alive {alive_nbors+=1}
+                if self.state[y][x+1]==Cell::Alive {alive_nbors+=1}
+            }
+        }
+        return match self.state[y][x]{
+            Cell::Alive => {
+                if alive_nbors<2 {Cell::Dead}
+                else if alive_nbors==2 || alive_nbors==3 {Cell::Alive}
+                else {Cell::Dead}
+            },
+            Cell::Dead => {
+                if alive_nbors==3 {Cell::Alive}
+                else {Cell::Dead}
+            }
+        };
     }
 
     fn check_corners(&self, x:usize, y:usize)->Cell{
