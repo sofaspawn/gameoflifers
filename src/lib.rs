@@ -51,7 +51,7 @@ impl Board{
         let mut state = vec![vec![Cell::Dead;self.width]; self.height];
         for y in 0..self.height{
             for x in 0..self.width{
-                if rng.gen::<f32>()>0.9 {state[y][x]=Cell::Alive}
+                if rng.gen::<f32>()>0.8 {state[y][x]=Cell::Alive}
             }
         }
         self.state = state;

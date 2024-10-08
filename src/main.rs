@@ -6,11 +6,12 @@ const WIDTH:usize = 40;
 
 fn main() {
     let mut board = Board::new(WIDTH, HEIGHT);
-    let mut i:u32 = 0;
+    let mut gen:u32 = 0;
     loop {
-        if i%20==0 {board.random_state()} else {board.next_state()}
-        board.render(i);
-        i+=1;
-        thread::sleep(time::Duration::from_millis(500));
+        //resets after every 100 generations
+        if gen%100==0 {board.random_state()} else {board.next_state()}
+        board.render(gen);
+        gen+=1;
+        thread::sleep(time::Duration::from_millis(300));
     }
 }
