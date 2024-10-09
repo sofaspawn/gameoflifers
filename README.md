@@ -5,4 +5,10 @@ Game of life implemented in rust
 - I calculate the next state for central elements, corners and edges separately
 ![next-state function](./next-state.png)
 ---
-this is it as of now
+to run this for yourself
+```
+$ git clone https://github.com/sofaspawn/gameoflifers.git
+$ cd gameoflifers
+$ ./gameoflife
+```
+
